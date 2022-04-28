@@ -1,4 +1,6 @@
 from itertools import product
+import matplotlib.pyplot as plt
+from random import choices
 
 # A node has a name, a node above, a node left, and a node right
 class node:
@@ -69,21 +71,8 @@ def paths_like_this(my_node = "0", k = 1):
         given_paths, 
         total_paths, 
         given_paths/total_paths))
+    return(given_paths/total_paths)
             
-all_paths(k=3, verbal = True)
-
-my_node = "0URL"
-print("\nProportion of paths ending at {} after k steps:\n".format(my_node))
-for k in range(1,12):
-    paths_like_this(my_node = my_node, k = k)
-
-
-
-
-
-
-
-from random import choices
 
 # Find destinations of random paths of length k
 def random_paths(k = 1, count = 256):
@@ -113,18 +102,27 @@ def random_paths_like_this(my_node = "0", k = 1, count = 256):
         given_paths/total_paths))
     return(given_paths/total_paths)
             
-my_node = "0URL"
-k_count = 25
-print("\nProportion of random paths ending at {} after k steps:\n".format(my_node))
-proportions = []
-for k in range(1,k_count):
-    proportions.append(random_paths_like_this(my_node = my_node, k = k, count = 2**17))
-    
-import matplotlib.pyplot as plt
 
-plt.plot(
-    [i for i in range(1,k_count)],
-    proportions
-    )
-plt.ylim([0, 1])
-plt.show()
+
+def plot_path_proportion(my_node, k_count, random = False, count = 256):
+    if(random):
+        print("\nProportion of random paths ending at {} after k steps:\n".format(my_node))
+    else:
+        print("\nProportion of paths ending at {} after k steps:\n".format(my_node))
+    proportions = []
+    for k in range(1,k_count):
+        if(random):
+            proportions.append(random_paths_like_this(my_node = my_node, k = k, count = count))
+        else:
+            proportions.append(paths_like_this(my_node = my_node, k = k))
+    
+    x = [i for i in range(1, k_count) if proportions[i-1] != 0]
+    y = [p for p in proportions if p != 0]
+    plt.plot(x,y)
+    plt.ylim([0, 1])
+    plt.show()
+    
+if __name__ == "__main__":
+    all_paths(k=3, verbal = True)
+    plot_path_proportion("0", 13)
+    plot_path_proportion("0", 25, random = True, count = 2**16)

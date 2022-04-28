@@ -105,7 +105,7 @@ def paths_like_this(my_node = "0", k = 1):
         given_paths/total_paths))
     return(given_paths/total_paths)
             
-my_node = "0LL"
+my_node = "0"
 k_count = 15
 print("\nProportion of paths ending at {} after k steps:\n".format(my_node))
 proportions = []
